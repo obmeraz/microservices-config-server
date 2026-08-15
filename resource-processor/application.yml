@@ -1,0 +1,39 @@
+server:
+  port: '8082'
+
+spring:
+  application:
+    name: resource-processor
+  rabbitmq:
+    password: ${SPRING_RABBITMQ_PASSWORD:guest}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    username: ${SPRING_RABBITMQ_USERNAME:guest}
+  cloud:
+    stream:
+      bindings:
+        resourceUploaded-in-0:
+          consumer:
+            max-attempts: '3'
+            retryable-exceptions:
+              java:
+                lang:
+                  IllegalArgumentException: 'false'
+          destination: resource.uploaded
+          group: resource-processor
+      rabbit:
+        bindings:
+          resourceUploaded-in-0:
+            consumer:
+              exchangeType: topic
+              republish-to-dlq: 'true'
+              auto-bind-dlq: 'true'
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - refresh

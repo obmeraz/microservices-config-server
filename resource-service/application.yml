@@ -1,0 +1,45 @@
+server:
+  port: '8080'
+
+spring:
+  application:
+    name: resource-service
+  cloud:
+    stream:
+      rabbit:
+        bindings:
+          resourceUploaded-out-0:
+            producer:
+              exchangeType: topic
+              auto-bind-dlq: 'true'
+      bindings:
+        resourceUploaded-out-0:
+          producer:
+            required-groups: resource-processor
+          destination: resource.uploaded
+  rabbitmq:
+    password: ${SPRING_RABBITMQ_PASSWORD:guest}
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: ${SPRING_RABBITMQ_USERNAME:guest}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: 'false'
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5438/resource-db}
+
+aws:
+  s3:
+    endpoint: ${AWS_S3_ENDPOINT:http://localhost:4566}
+    secret-key: ${AWS_SECRET_ACCESS_KEY:test}
+    access-key: ${AWS_ACCESS_KEY_ID:test}
+    bucket-name: resource-service-mp3
+    region: us-east-1
+

@@ -1,0 +1,23 @@
+song:
+  service:
+    name: song-service
+
+resource:
+  service:
+    name: resource-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://localhost:8761/eureka}
+    registry-fetch-interval-seconds: '5'
+  instance:
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
+    lease-renewal-interval-in-seconds: '5'
+    prefer-ip-address: ${EUREKA_PREFER_IP_ADDRESS:false}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
