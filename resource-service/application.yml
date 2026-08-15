@@ -6,17 +6,29 @@ spring:
     name: resource-service
   cloud:
     stream:
+      bindings:
+        resourceUploaded-out-0:
+          destination: resource.uploaded
+          producer:
+            required-groups: resource-processor
+        resourceProcessed-in-0:
+          destination: resource.processed
+          group: resource-service
+          consumer:
+            max-attempts: '3'
+            retryable-exceptions:
+              java.lang.IllegalArgumentException: 'false'
       rabbit:
         bindings:
           resourceUploaded-out-0:
             producer:
               exchangeType: topic
               auto-bind-dlq: 'true'
-      bindings:
-        resourceUploaded-out-0:
-          producer:
-            required-groups: resource-processor
-          destination: resource.uploaded
+          resourceProcessed-in-0:
+            consumer:
+              exchangeType: topic
+              republish-to-dlq: 'true'
+              auto-bind-dlq: 'true'
   rabbitmq:
     password: ${SPRING_RABBITMQ_PASSWORD:guest}
     host: ${SPRING_RABBITMQ_HOST:localhost}
@@ -40,6 +52,4 @@ aws:
     endpoint: ${AWS_S3_ENDPOINT:http://localhost:4566}
     secret-key: ${AWS_SECRET_ACCESS_KEY:test}
     access-key: ${AWS_ACCESS_KEY_ID:test}
-    bucket-name: resource-service-mp3
     region: us-east-1
-

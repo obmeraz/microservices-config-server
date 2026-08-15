@@ -6,6 +6,10 @@ resource:
   service:
     name: resource-service
 
+storage:
+  service:
+    name: storage-service
+
 eureka:
   client:
     service-url:
