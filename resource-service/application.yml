@@ -53,3 +53,17 @@ aws:
     secret-key: ${AWS_SECRET_ACCESS_KEY:test}
     access-key: ${AWS_ACCESS_KEY_ID:test}
     region: us-east-1
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      storageService:
+        registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 6
+        minimumNumberOfCalls: 3
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 2
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
