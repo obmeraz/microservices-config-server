@@ -13,14 +13,16 @@ spring:
     stream:
       bindings:
         resourceUploaded-in-0:
+          destination: resource.uploaded
+          group: resource-processor
           consumer:
             max-attempts: '3'
             retryable-exceptions:
-              java:
-                lang:
-                  IllegalArgumentException: 'false'
-          destination: resource.uploaded
-          group: resource-processor
+              java.lang.IllegalArgumentException: 'false'
+        resourceProcessed-out-0:
+          destination: resource.processed
+          producer:
+            required-groups: resource-service
       rabbit:
         bindings:
           resourceUploaded-in-0:
@@ -28,7 +30,10 @@ spring:
               exchangeType: topic
               republish-to-dlq: 'true'
               auto-bind-dlq: 'true'
-
+          resourceProcessed-out-0:
+            producer:
+              exchangeType: topic
+              auto-bind-dlq: 'true'
 
 management:
   endpoints:
