@@ -1,6 +1,7 @@
 spring:
   application:
     name: api-gateway
+
 server:
   port: '8083'
 
@@ -11,9 +12,3 @@ logging:
         cloud:
           gateway: TRACE
           loadbalancer: DEBUG
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health
