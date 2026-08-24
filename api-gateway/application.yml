@@ -10,5 +10,6 @@ logging:
     org:
       springframework:
         cloud:
-          gateway: TRACE
-          loadbalancer: DEBUG
+          gateway: INFO
+          loadbalancer: WARN
+        web: WARN
