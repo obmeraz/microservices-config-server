@@ -1,6 +1,12 @@
 spring:
   application:
     name: api-gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI:http://localhost:8085/realms/microservices}
+          jwk-set-uri: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI:http://localhost:8085/realms/microservices/protocol/openid-connect/certs}
 
 server:
   port: '8083'
@@ -12,4 +18,5 @@ logging:
         cloud:
           gateway: INFO
           loadbalancer: WARN
+        security: INFO
         web: WARN
